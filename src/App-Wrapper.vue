@@ -1,13 +1,30 @@
 <script>
+import axios from 'axios';
+
 export default {
     data() {
         return {
             city: "",
+            error: "",
+            info: null,
+            API: "45d2e535af15db46f2e53a8367d8ae2e",
+            full_url: "https://api.openweathermap.org/data/2.5/weather?q=Seattle&appid=45d2e535af15db46f2e53a8367d8ae2e",
         }
     },
     computed: {
         cityName() {
             return "<<" + this.city + ">>"
+        }
+    },
+    methods:{
+        getWeather() {
+            if(this.city.trim().length < 2) {
+                this.error = "Сообщение об ошибке"
+                return false
+            }
+            this.error = ""
+            axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${this.city}&appid=${this.API}`)
+                .then(res => (this.info = res))
         }
     }
 }
@@ -18,12 +35,18 @@ export default {
         <h1>Погодное приложение</h1>
         <p>Узнать погоду в {{ city == "" ? "вашем городе" : cityName }}</p>
         <input type="text" v-model="city" placeholder="Введите город">
-        <button v-if="city != ''">Получить погоду</button>
+        <button v-if="city != ''" @click="getWeather()">Получить погоду</button>
         <button disabled v-else>Введите название города</button>
+        <p class="error">{{ error }}</p>
+
+        <p v-show="info != null">{{ info }}</p>
     </div>
 </template>
 
 <style scoped>
+.error {
+    color:#ff3333
+}
 .wrapper {
     width: 1000px;
     height: 800px;
