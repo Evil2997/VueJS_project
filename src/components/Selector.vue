@@ -1,14 +1,30 @@
 <script>
 export default {
-    
+    props: {
+        setCrypto: {
+            type: Function,
+            required: true,
+        }
+    },
+    data() {
+        return {
+            current: ""
+        }
+    },
+    methods: {
+        selectItem(val) {
+            this.setCrypto(val);
+            this.current = val;
+        }
+    }
 }
 </script>
 
 <template>
     <ul>
-        <li>BTC</li>
-        <li>ETH</li>
-        <li>USDT</li>
+        <li @click="selectItem('BTC')" :class="{ active: current == 'BTC' }">BTC</li>
+        <li @click="selectItem('ETH')" :class="{ active: current == 'ETH' }">ETH</li>
+        <li @click="selectItem('USDT')" :class="{ active: current == 'USDT' }">USDT</li>
     </ul>
 </template>
 
@@ -24,13 +40,13 @@ ul {
 
 li {
     display: block;
-    background: #1A032D;
+    background: #1d0333;
     color: #fff;
     padding: 20px 0;
 }
 
 li:hover, li.active {
-    background: #24043e;
+    background: #0b0213;
     cursor: pointer;
 }
 </style>
